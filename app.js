@@ -1,4 +1,4 @@
-const MOOD_LABELS = { spicy: "🌶️ 매운", quick: "⚡ 빠른", hearty: "🍚 든든한", light: "🥗 가벼운" };
+const MOOD_LABELS = { spicy: "🌶️ 매운", quick: "⚡ 빠른", hearty: "🍚 든든한", babyak: "🤝 밥약" };
 const COLORS = ["#8b0029", "#c9a227", "#b23a5a", "#e0c36a", "#5e0a22", "#d9786f"];
 const SPIN_TURNS = 5;
 
