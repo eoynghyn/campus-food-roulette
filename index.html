@@ -13,10 +13,46 @@
       <p class="sub">고려대 세종캠퍼스 근처, 오늘 뭐 먹지?</p>
     </header>
 
-    <section class="card">
-      <h2>식당 목록</h2>
-      <ul id="list" class="list"></ul>
+    <fieldset class="card" id="filters">
+      <div class="group">
+        <h2>1인 예산</h2>
+        <div class="chips">
+          <label><input type="radio" name="budget" value="0" checked><span>상관없음</span></label>
+          <label><input type="radio" name="budget" value="7000"><span>7천원 이하</span></label>
+          <label><input type="radio" name="budget" value="10000"><span>1만원 이하</span></label>
+          <label><input type="radio" name="budget" value="15000"><span>1.5만원 이하</span></label>
+        </div>
+      </div>
+      <div class="group">
+        <h2>인원</h2>
+        <div class="chips">
+          <label><input type="radio" name="group" value="1" checked><span>혼밥</span></label>
+          <label><input type="radio" name="group" value="2"><span>2명</span></label>
+          <label><input type="radio" name="group" value="4"><span>3~4명</span></label>
+          <label><input type="radio" name="group" value="5"><span>5명 이상</span></label>
+        </div>
+      </div>
+      <div class="group">
+        <h2>오늘의 기분 <small>(여러 개 선택 가능)</small></h2>
+        <div class="chips">
+          <label><input type="checkbox" name="mood" value="spicy"><span>🌶️ 매운</span></label>
+          <label><input type="checkbox" name="mood" value="quick"><span>⚡ 빠른</span></label>
+          <label><input type="checkbox" name="mood" value="hearty"><span>🍚 든든한</span></label>
+          <label><input type="checkbox" name="mood" value="light"><span>🥗 가벼운</span></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <section class="card wheel-card">
+      <div class="wheel-wrap">
+        <div class="pointer" aria-hidden="true"></div>
+        <canvas id="wheel" width="600" height="600" aria-label="식당 룰렛"></canvas>
+      </div>
+      <p id="match-count" class="match-count"></p>
+      <button id="spin" class="spin">룰렛 돌리기</button>
     </section>
+
+    <section class="card result" id="result" hidden aria-live="polite"></section>
   </main>
 
   <script src="restaurants.js"></script>
