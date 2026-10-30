@@ -18,17 +18,15 @@ const won = (n) => n.toLocaleString("ko-KR") + "원";
 function readFilters() {
   return {
     budget: Number(filtersEl.querySelector("input[name=budget]:checked").value),
-    group: Number(filtersEl.querySelector("input[name=group]:checked").value),
     moods: [...filtersEl.querySelectorAll("input[name=mood]:checked")].map((el) => el.value),
   };
 }
 
-// 예산·인원은 모두 만족해야 하고, 기분은 하나라도 맞으면 통과 (선택 안 하면 전부 통과)
-function getCandidates({ budget, group, moods }) {
+// 예산은 꼭 만족해야 하고, 기분은 하나라도 맞으면 통과 (선택 안 하면 전부 통과)
+function getCandidates({ budget, moods }) {
   return RESTAURANTS.filter(
     (r) =>
       (budget === 0 || r.price <= budget) &&
-      r.maxGroup >= group &&
       (moods.length === 0 || moods.some((m) => r.moods.includes(m)))
   );
 }
