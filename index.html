@@ -40,10 +40,19 @@
         <canvas id="wheel" width="600" height="600" aria-label="식당 룰렛"></canvas>
       </div>
       <p id="match-count" class="match-count"></p>
+      <button id="override" class="text-btn" hidden>최근 기록 무시하고 돌리기</button>
       <button id="spin" class="spin">룰렛 돌리기</button>
     </section>
 
     <section class="card result" id="result" hidden aria-live="polite"></section>
+
+    <section class="card" id="history" hidden>
+      <div class="history-head">
+        <h2>최근 뽑힌 식당 <small>(3일 동안 룰렛에서 빠져요)</small></h2>
+        <button id="clear-history" class="text-btn">기록 지우기</button>
+      </div>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
   </main>
 
   <script src="restaurants.js"></script>

@@ -1,6 +1,9 @@
 const MOOD_LABELS = { spicy: "🌶️ 매운", quick: "⚡ 빠른", hearty: "🍚 든든한", babyak: "🤝 밥약" };
 const COLORS = ["#8b0029", "#c9a227", "#b23a5a", "#e0c36a", "#5e0a22", "#d9786f"];
 const SPIN_TURNS = 5;
+const HISTORY_KEY = "food-roulette-history";
+const EXCLUDE_DAYS = 3;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 const filtersEl = document.getElementById("filters");
 const canvas = document.getElementById("wheel");
@@ -8,12 +11,55 @@ const ctx = canvas.getContext("2d");
 const spinBtn = document.getElementById("spin");
 const countEl = document.getElementById("match-count");
 const resultEl = document.getElementById("result");
+const overrideBtn = document.getElementById("override");
+const historyEl = document.getElementById("history");
+const historyListEl = document.getElementById("history-list");
 
 let candidates = [];
 let rotation = 0;
 let spinning = false;
+let ignoreHistory = false;
 
 const won = (n) => n.toLocaleString("ko-KR") + "원";
+
+// 최근 기록은 브라우저(localStorage)에 [{ name, at }] 형태로 저장한다.
+// 시크릿 모드처럼 저장소를 못 쓰는 환경에서도 앱이 멈추지 않도록 try/catch로 감싼다.
+function loadHistory() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(HISTORY_KEY)) ?? [];
+    return saved.filter((h) => Date.now() - h.at < EXCLUDE_DAYS * DAY_MS);
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(history) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  } catch {
+    // 저장하지 못해도 룰렛은 계속 쓸 수 있다
+  }
+}
+
+function addToHistory(name) {
+  const history = loadHistory().filter((h) => h.name !== name);
+  history.unshift({ name, at: Date.now() });
+  saveHistory(history);
+}
+
+function daysAgoLabel(at) {
+  const startOfToday = new Date().setHours(0, 0, 0, 0);
+  const days = Math.ceil((startOfToday - at) / DAY_MS);
+  return days <= 0 ? "오늘" : days === 1 ? "어제" : `${days}일 전`;
+}
+
+function renderHistory() {
+  const history = loadHistory();
+  historyEl.hidden = history.length === 0;
+  historyListEl.innerHTML = history
+    .map((h) => `<li><span>${h.name}</span><span class="when">${daysAgoLabel(h.at)}</span></li>`)
+    .join("");
+}
 
 function readFilters() {
   return {
@@ -35,7 +81,7 @@ function shortName(name) {
   return name.length > 9 ? name.slice(0, 8) + "…" : name;
 }
 
-function drawWheel(items) {
+function drawWheel(items, emptyLabel = "후보 없음") {
   const size = canvas.width;
   const c = size / 2;
   const radius = c - 6;
@@ -50,7 +96,7 @@ function drawWheel(items) {
     ctx.font = "bold 30px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("후보 없음", c, c);
+    ctx.fillText(emptyLabel, c, c);
     return;
   }
 
@@ -96,24 +142,40 @@ function resetRotation() {
   canvas.style.transition = "";
 }
 
-function render() {
-  candidates = getCandidates(readFilters());
-  if (candidates.length <= 1) resetRotation();
-  drawWheel(candidates);
-  resultEl.hidden = true;
+// 조건에 맞는 식당 중 최근에 뽑힌 곳을 뺀 목록을 만든다 ("기록 무시"를 누르면 빼지 않는다)
+function computeCandidates() {
+  const matched = getCandidates(readFilters());
+  const recent = new Set(loadHistory().map((h) => h.name));
+  const fresh = matched.filter((r) => !recent.has(r.name));
+  const list = ignoreHistory ? matched : fresh;
+  return { list, matched: matched.length, excluded: matched.length - list.length };
+}
 
-  if (candidates.length === 0) {
+function updateControls({ list, matched, excluded }) {
+  const allRecent = matched > 0 && list.length === 0;
+  overrideBtn.hidden = !allRecent;
+  spinBtn.disabled = list.length === 0;
+  spinBtn.textContent = list.length === 1 ? "결과 보기" : "룰렛 돌리기";
+
+  if (matched === 0) {
     countEl.textContent = "조건에 맞는 식당이 없어요. 조건을 조금 넓혀 보세요.";
-    spinBtn.disabled = true;
-  } else if (candidates.length === 1) {
-    countEl.textContent = "조건에 맞는 식당이 딱 1곳이에요!";
-    spinBtn.disabled = false;
-    spinBtn.textContent = "결과 보기";
+  } else if (allRecent) {
+    countEl.textContent = `조건에 맞는 ${matched}곳을 최근 ${EXCLUDE_DAYS}일 안에 모두 뽑았어요.`;
   } else {
-    countEl.textContent = `후보 ${candidates.length}곳`;
-    spinBtn.disabled = false;
-    spinBtn.textContent = "룰렛 돌리기";
+    const note = excluded > 0 ? ` · 최근에 뽑힌 ${excluded}곳 제외` : "";
+    countEl.textContent =
+      (list.length === 1 ? "조건에 맞는 식당이 딱 1곳이에요!" : `후보 ${list.length}곳`) + note;
   }
+}
+
+function render() {
+  const state = computeCandidates();
+  candidates = state.list;
+  if (candidates.length <= 1) resetRotation();
+  drawWheel(candidates, state.matched > 0 ? "모두 최근에 뽑음" : "후보 없음");
+  resultEl.hidden = true;
+  updateControls(state);
+  renderHistory();
 }
 
 function showResult(r) {
@@ -129,10 +191,18 @@ function showResult(r) {
     ${map}`;
   resultEl.hidden = false;
   resultEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  // 결과는 기록에 남기고, 룰렛은 그대로 둔 채 다음에 돌릴 후보 수만 갱신한다
+  addToHistory(r.name);
+  renderHistory();
+  updateControls(computeCandidates());
 }
 
 function spin() {
-  if (spinning || candidates.length === 0) return;
+  if (spinning) return;
+  // 직전 결과가 기록에 추가됐을 수 있으니 돌리기 전에 후보를 다시 계산한다
+  render();
+  if (candidates.length === 0) return;
   if (candidates.length === 1) {
     showResult(candidates[0]);
     return;
@@ -142,6 +212,7 @@ function spin() {
   const n = candidates.length;
   const seg = 360 / n;
   const winner = Math.floor(Math.random() * n);
+  const picked = candidates[winner];
   const target = (winner + 0.2 + Math.random() * 0.6) * seg;
   const current = ((rotation % 360) + 360) % 360;
   const delta = (((360 - target) - current) % 360 + 360) % 360;
@@ -159,10 +230,23 @@ function spin() {
     spinning = false;
     spinBtn.disabled = false;
     filtersEl.disabled = false;
-    showResult(candidates[winner]);
+    showResult(picked);
   }, duration + 50);
 }
 
-filtersEl.addEventListener("change", render);
+filtersEl.addEventListener("change", () => {
+  ignoreHistory = false;
+  render();
+});
 spinBtn.addEventListener("click", spin);
+overrideBtn.addEventListener("click", () => {
+  ignoreHistory = true;
+  render();
+});
+document.getElementById("clear-history").addEventListener("click", () => {
+  if (spinning) return;
+  saveHistory([]);
+  ignoreHistory = false;
+  render();
+});
 render();
