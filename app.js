@@ -2,7 +2,7 @@ const MOOD_LABELS = { spicy: "🌶️ 매운", quick: "⚡ 빠른", hearty: "�
 const COLORS = ["#8b0029", "#c9a227", "#b23a5a", "#e0c36a", "#5e0a22", "#d9786f"];
 const SPIN_TURNS = 5;
 const HISTORY_KEY = "food-roulette-history";
-const EXCLUDE_DAYS = 3;
+const EXCLUDE_COUNT = 2;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 const filtersEl = document.getElementById("filters");
@@ -22,12 +22,12 @@ let ignoreHistory = false;
 
 const won = (n) => n.toLocaleString("ko-KR") + "원";
 
-// 최근 기록은 브라우저(localStorage)에 [{ name, at }] 형태로 저장한다.
+// 최근 기록은 브라우저(localStorage)에 [{ name, at }] 형태로, 가장 최근 EXCLUDE_COUNT개만 저장한다.
 // 시크릿 모드처럼 저장소를 못 쓰는 환경에서도 앱이 멈추지 않도록 try/catch로 감싼다.
 function loadHistory() {
   try {
-    const saved = JSON.parse(localStorage.getItem(HISTORY_KEY)) ?? [];
-    return saved.filter((h) => Date.now() - h.at < EXCLUDE_DAYS * DAY_MS);
+    const saved = JSON.parse(localStorage.getItem(HISTORY_KEY));
+    return Array.isArray(saved) ? saved.slice(0, EXCLUDE_COUNT) : [];
   } catch {
     return [];
   }
@@ -44,7 +44,7 @@ function saveHistory(history) {
 function addToHistory(name) {
   const history = loadHistory().filter((h) => h.name !== name);
   history.unshift({ name, at: Date.now() });
-  saveHistory(history);
+  saveHistory(history.slice(0, EXCLUDE_COUNT));
 }
 
 function daysAgoLabel(at) {
@@ -160,7 +160,7 @@ function updateControls({ list, matched, excluded }) {
   if (matched === 0) {
     countEl.textContent = "조건에 맞는 식당이 없어요. 조건을 조금 넓혀 보세요.";
   } else if (allRecent) {
-    countEl.textContent = `조건에 맞는 ${matched}곳을 최근 ${EXCLUDE_DAYS}일 안에 모두 뽑았어요.`;
+    countEl.textContent = `조건에 맞는 ${matched}곳이 모두 최근 ${EXCLUDE_COUNT}번 안에 뽑혔어요.`;
   } else {
     const note = excluded > 0 ? ` · 최근에 뽑힌 ${excluded}곳 제외` : "";
     countEl.textContent =
