@@ -1,113 +1,113 @@
-# 🎲 Sejong Campus Lunch Roulette
+# 🎲 세종캠 점심 룰렛
 
-A roulette web app that picks a lunch spot near Korea University Sejong Campus based on your budget and mood.
+예산과 기분에 맞춰 고려대 세종캠퍼스 근처 점심 식당을 골라 주는 룰렛 웹앱입니다.
 
-**Live app:** https://eoynghyn.github.io/campus-food-roulette/
+**배포 주소:** https://eoynghyn.github.io/campus-food-roulette/
 
-## Purpose and intended user
+## 목적과 대상 사용자
 
-This app is for Korea University Sejong Campus students who cannot decide where to eat. I usually cannot pick a restaurant, so on most days I just end up eating at the school cafeteria, even though there are many good places near campus. The app turns this daily decision into a quick game: choose a budget and a mood, spin the wheel, and go.
+이 앱은 어디서 먹을지 정하지 못하는 고려대 세종캠퍼스 학생들을 위한 앱입니다. 저는 보통 식당을 고르지 못해서, 학교 근처에 좋은 곳이 많은데도 대부분 그냥 학식을 먹게 됩니다. 이 앱은 매일 하는 이 고민을 빠른 게임으로 바꿔 줍니다. 예산과 기분을 고르고, 룰렛을 돌리고, 가면 됩니다.
 
-## How to use
+## 사용 방법
 
-1. Open the [live app](https://eoynghyn.github.io/campus-food-roulette/) on a phone or computer.
-2. Choose a **budget per person** (any, under ₩7,000, under ₩10,000, or under ₩15,000).
-3. (Optional) Choose one or more **moods**: 🌶️ spicy, ⚡ quick, 🍚 hearty, or 🤝 *babyak* (a meal with a senior or junior student). If you skip this step, every mood is included.
-4. Press **룰렛 돌리기** (Spin). The wheel stops on one restaurant and shows its category, price, and walking time.
-5. The last 2 picks are left off the wheel, so you do not get the same place again and again. Press **기록 지우기** (Clear) to reset.
+1. 폰이나 컴퓨터로 [배포된 앱](https://eoynghyn.github.io/campus-food-roulette/)을 엽니다.
+2. **1인 예산**을 고릅니다 (상관없음, 7천원 이하, 1만원 이하, 1.5만원 이하).
+3. (선택) **오늘의 기분**을 하나 이상 고릅니다: 🌶️ 매운, ⚡ 빠른, 🍚 든든한, 🤝 밥약(선배나 후배와 먹는 밥). 고르지 않으면 모든 식당이 포함됩니다.
+4. **룰렛 돌리기**를 누릅니다. 룰렛이 한 식당에 멈추고 음식 종류, 가격, 도보 시간을 보여 줍니다.
+5. 최근 2번 뽑힌 곳은 룰렛에서 빠지기 때문에 같은 곳이 계속 나오지 않습니다. **기록 지우기**를 누르면 초기화됩니다.
 
-To run it locally, download the repository and open `index.html` in a browser. There is no build step and no server.
+내 컴퓨터에서 실행하려면 저장소를 내려받은 뒤 `index.html`을 브라우저로 열면 됩니다. 따로 설치하거나 서버를 켤 필요가 없습니다.
 
-## Main features
+## 핵심 기능
 
-- **Condition filters:** budget and mood. Only matching restaurants go on the wheel.
-- **Roulette wheel and result card:** the pointer always lands on the restaurant shown in the result.
-- **"Not again" history:** the last 2 picks are skipped. History is saved in the browser.
+- **조건 필터:** 예산과 기분. 조건에 맞는 식당만 룰렛에 올라갑니다.
+- **룰렛과 결과 카드:** 화살표는 항상 결과 카드에 나온 식당을 가리킵니다.
+- **"또 여기?" 방지 기록:** 최근 2번 뽑힌 곳은 건너뜁니다. 기록은 브라우저에 저장됩니다.
 
-## Work process
+## 작업 과정
 
-1. **Choosing the idea.** I started with a meal planner idea, then switched. I asked Claude Code for ideas based on college students' interests and chose the lunch roulette because it was fun and small enough to finish.
-2. **Building the core.** Claude Code set up the project and built the filters, wheel, and result card. It tested the wheel by spinning it automatically many times and comparing the pointer with the result.
-3. **Adding real data.** I listed 15 restaurants near campus that I have been to myself, with their usual prices and walking times. I sent them as a simple list, and Claude Code converted them into data.
-4. **Changing the plan.** I removed the group-size filter and changed the history rule (see below).
-5. **Deploying.** I created a new public repository and published the app with GitHub Pages.
+1. **아이디어 정하기.** 식단 플래너 아이디어로 시작했다가 바꿨습니다. Claude Code에게 대학생 관심사 안에서 아이디어를 물어보고, 재밌고 기간 안에 끝낼 수 있을 만큼 작아서 점심 룰렛을 골랐습니다.
+2. **핵심 기능 만들기.** Claude Code가 프로젝트를 세팅하고 필터, 룰렛, 결과 카드를 만들었습니다. 룰렛을 자동으로 여러 번 돌려서 화살표와 결과가 맞는지 비교하며 테스트했습니다.
+3. **실제 데이터 넣기.** 제가 직접 가 본 캠퍼스 근처 식당 15곳을 평소 가격, 도보 시간과 함께 적었습니다. 간단한 목록으로 보내면 Claude Code가 데이터 형식으로 바꿨습니다.
+4. **계획 바꾸기.** 인원 필터를 빼고 기록 규칙을 바꿨습니다 (아래 참고).
+5. **배포하기.** 새 공개 저장소를 만들고 GitHub Pages로 앱을 공개했습니다.
 
-### Changes from the original plan
+### 처음 계획에서 바뀐 점
 
-My proposal included a **group-size filter**, but I removed it. I could not check how many seats each restaurant had, and with a guessed value the "5+ people" option always returned nothing. A filter based on unreliable data was worse than no filter.
+제출한 아이디어에는 **인원 필터**가 있었지만 뺐습니다. 식당별 좌석 수를 확인할 수 없었고, 추측한 값을 넣으니 "5명 이상"을 고르면 항상 결과가 0곳이었습니다. 믿을 수 없는 데이터로 만든 필터는 없는 것보다 못하다고 판단했습니다.
 
-I also changed the "not again" rule from **3 days** to **the last 2 picks**, because students do not eat out every day.
+"또 여기?" 규칙도 **3일 동안 제외**에서 **최근 2번 제외**로 바꿨습니다. 학생들이 매일 외식하지는 않기 때문입니다.
 
-## Claude Code evidence
+## Claude Code 작업 증거
 
-**1. Finding and fixing a bug.** The first fast automatic test showed 21 mismatches in 31 spins. Claude Code found that the browser's `transitionend` event sometimes did not fire in time, so a spin could stay stuck. After switching to a timer, 60 spins had 0 mismatches. This was fixed before the app was published.
+**1. 버그 찾고 고치기.** 첫 빠른 자동 테스트에서 31번 중 21번이 화살표와 결과가 맞지 않았습니다. Claude Code가 브라우저의 `transitionend` 신호가 제때 오지 않아 룰렛이 멈출 수 있다는 원인을 찾았습니다. 타이머로 기다리는 방식으로 바꾼 뒤 60번 중 불일치는 0번이었습니다. 앱을 공개하기 전에 고쳤습니다.
 
-![Bug fix](images/1-bug-fix.jpeg)
+![버그 수정](images/1-bug-fix.jpeg)
 
-**2. Adding real restaurant data.** I sent 15 restaurants I have visited. Tags that overlapped with the budget filter (cheap/expensive) were dropped, and *babyak* became a new mood.
+**2. 실제 식당 데이터 넣기.** 제가 가 본 식당 15곳을 보냈습니다. 예산 필터와 겹치는 태그(싼/비싼)는 빼고, *밥약*을 새 기분으로 추가했습니다.
 
-![Real data](images/2-real-data.jpeg)
+![실제 데이터](images/2-real-data.jpeg)
 
-**3. Removing the group-size filter.**
+**3. 인원 필터 빼기.**
 
-![Remove group filter](images/3-remove-group.jpeg)
+![인원 필터 삭제](images/3-remove-group.jpeg)
 
-**4. Changing "3 days" to "last 2 picks."**
+**4. "3일"을 "최근 2번"으로 바꾸기.**
 
-![Last 2 picks](images/4-last-2.jpeg)
+![최근 2번 제외](images/4-last-2.jpeg)
 
-**5. Edge case on the live app** (see Verification).
+**5. 배포된 앱의 엣지 케이스** (검증 참고).
 
-![Edge case](images/5-edge-case.jpeg)
+![엣지 케이스](images/5-edge-case.jpeg)
 
-**6. Commit history.** Each feature or decision has its own commit.
+**6. 커밋 기록.** 기능이나 결정마다 커밋을 따로 남겼습니다.
 
-![Commits](images/6-commits.jpeg)
+![커밋 기록](images/6-commits.jpeg)
 
-## Verification
+## 검증
 
-| Test | Result |
+| 테스트 | 결과 |
 |---|---|
-| Spin 150 times with all 15 restaurants | Pointer matched the result **150/150**; every restaurant was picked |
-| Spin 20 times in a row | A restaurant from the previous 2 picks never came back |
-| 3rd most recent pick | Returned to the wheel |
-| Reload the page | History was kept |
-| Broken value in browser storage | App still worked |
-| Live site on a phone-sized screen | Layout fit; spin result matched |
+| 식당 15곳으로 룰렛 150번 돌리기 | 화살표와 결과 **150번 모두 일치**, 15곳 모두 한 번 이상 나옴 |
+| 20번 연속 돌리기 | 직전 2번에 나온 식당이 다시 나온 적 없음 |
+| 3번 전에 뽑힌 식당 | 다시 룰렛에 돌아옴 |
+| 페이지 새로고침 | 기록이 유지됨 |
+| 브라우저 저장소에 잘못된 값 | 앱이 정상 작동 |
+| 폰 크기 화면에서 배포된 앱 | 화면이 잘 맞고 결과도 일치 |
 
-**Manual checks (by me)**
+**직접 확인한 것**
 
-- Under ₩7,000, spun twice on my laptop → the "spin anyway" button appeared (screenshot 5).
-- Used the live app myself on my laptop and phone: the wheel never got stuck, the layout fit my phone, and spinning without choosing a mood worked.
+- 노트북에서 7천원 이하를 고르고 두 번 돌리니 "최근 기록 무시하고 돌리기" 버튼이 나타났습니다 (사진 5).
+- 노트북과 폰에서 배포된 앱을 직접 써 봤습니다. 룰렛이 멈춘 적이 없고, 폰 화면에 잘 맞고, 기분을 고르지 않아도 잘 돌아갔습니다.
 
-**Edge cases**
+**엣지 케이스**
 
-- **No match:** 🌶️ spicy + under ₩7,000 → "조건에 맞는 식당이 없어요" and the spin button is disabled.
-- **Only one match:** the result is shown without spinning.
-- **Every match was picked recently:** under ₩7,000 has only 2 places. After both are picked, the app explains why and offers "최근 기록 무시하고 돌리기" (spin anyway).
+- **후보 0곳:** 🌶️ 매운 + 7천원 이하 → "조건에 맞는 식당이 없어요" 안내가 나오고 돌리기 버튼이 꺼집니다.
+- **후보 1곳:** 룰렛을 돌리지 않고 바로 결과를 보여 줍니다.
+- **조건에 맞는 곳을 최근에 모두 뽑음:** 7천원 이하는 2곳뿐입니다. 둘 다 뽑히면 앱이 이유를 설명하고 "최근 기록 무시하고 돌리기" 버튼을 보여 줍니다.
 
-## Three effective practices
+## 효과적이었던 방법 3가지
 
-1. **Asking right away when I did not understand.** I asked what an "edge case" was, how to edit a JavaScript file, and whether I could save the project in OneDrive. Short questions saved time and stopped me from making mistakes.
-2. **Removing a feature I could not check.** When I had no seat counts, I asked to remove the group-size filter instead of guessing. A smaller app that gives correct results was better than a bigger one that gives wrong results.
-3. **Choosing accuracy over quantity.** I know more restaurants, but I only listed 15 places I had actually visited. Fewer, reliable entries made the app easier to test and trust.
+1. **모르는 건 바로 물어보기.** "엣지 케이스"가 무슨 뜻인지, JavaScript 파일은 어떻게 고치는지, 원드라이브에 저장해도 되는지 바로 물어봤습니다. 짧은 질문으로 시간을 아끼고 실수를 막을 수 있었습니다.
+2. **확인할 수 없는 기능은 빼기.** 좌석 수 정보가 없을 때 추측하는 대신 인원 필터를 빼 달라고 했습니다. 틀린 결과를 주는 큰 앱보다 정확한 결과를 주는 작은 앱이 낫다고 생각했습니다.
+3. **양보다 정확성.** 아는 식당은 더 있지만 실제로 가 본 15곳만 적었습니다. 개수는 적어도 믿을 수 있는 정보라서 테스트하기도, 믿고 쓰기도 쉬웠습니다.
 
-## Three difficulties
+## 어려웠던 점 3가지
 
-1. **Changing my topic.** I first chose a weekly meal planner for students living alone and even made a weekly plan for it. Later I wanted a different idea, so I asked for new topics within college students' interests and picked the lunch roulette because it felt fresh and fun. Changing topics cost time, but I chose an idea I was excited about and kept its scope small so I could still finish.
-2. **Missing data for the group filter.** I could not collect seat counts, so I removed the filter instead of guessing.
-3. **Setting up GitHub.** I did not remember my GitHub ID, was not sure whether to save the project in OneDrive, and almost reused my class practice repository. I found my ID and password myself and logged in again. I kept the project out of OneDrive because syncing can break Git files, and I made a new repository because the assignment asked for one.
+1. **주제 변경.** 처음에는 자취생을 위한 주간 식단 플래너로 정하고 주차별 계획까지 짰습니다. 그런데 다른 아이디어를 하고 싶어져서 대학생 관심사 안에서 새 주제를 추천받았고, 새롭고 재밌어 보이는 점심 룰렛을 골랐습니다. 주제를 바꾸느라 시간이 더 들었지만, 제가 하고 싶은 아이디어를 골랐고 범위를 작게 잡아서 끝까지 완성할 수 있었습니다.
+2. **인원 데이터 부족.** 식당별 좌석 수를 모을 수 없어서, 추측하는 대신 필터를 뺐습니다.
+3. **GitHub 설정.** GitHub 아이디가 기억나지 않았고, 프로젝트를 원드라이브에 저장해도 되는지 확신이 없었고, 수업 실습 저장소를 다시 쓸 뻔했습니다. 아이디와 비밀번호는 직접 찾아서 다시 로그인했습니다. 동기화가 Git 파일을 망가뜨릴 수 있어서 프로젝트를 원드라이브에 저장하지 않았고, 과제에서 새 저장소를 요구해서 새로 만들었습니다.
 
-## Known limitations
+## 알려진 한계
 
-- Prices and walking times come from my own visits, not official menus, and must be updated by hand.
-- Opening hours and closed days are not considered.
-- History is saved per browser, so it is not shared between friends or devices.
-- With many restaurants, names on the wheel become small on phones.
+- 가격과 도보 시간은 공식 메뉴가 아니라 제가 가 본 경험을 기준으로 했고, 직접 업데이트해야 합니다.
+- 영업시간과 휴무일은 반영되지 않습니다.
+- 기록은 브라우저마다 따로 저장되어 친구나 다른 기기와 공유되지 않습니다.
+- 식당이 많아지면 폰에서 룰렛 위 이름이 작아집니다.
 
-## Key files for grading
+## 채점용 핵심 파일
 
-1. [`app.js`](app.js): filters, wheel drawing, spin logic, and history
-2. [`restaurants.js`](restaurants.js): restaurant data I collected
-3. [`index.html`](index.html): page structure
-4. [`style.css`](style.css): layout and mobile design
+1. [`app.js`](app.js): 필터, 룰렛 그리기, 돌리기 로직, 기록 기능
+2. [`restaurants.js`](restaurants.js): 직접 모은 식당 데이터
+3. [`index.html`](index.html): 화면 구조
+4. [`style.css`](style.css): 레이아웃과 모바일 디자인
